@@ -1,3 +1,5 @@
+// Rename this file to 'appsettings.json' and replace the access token with your own.
+
 {
   "Logging": {
     "LogLevel": {
