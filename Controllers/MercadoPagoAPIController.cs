@@ -35,18 +35,26 @@ public class MercadoPagoAPIController : ControllerBase
         var paymentId = webhook.Data.Id;
         Console.WriteLine($"Payment Id: {paymentId}");
 
+        decimal? TransactionAmount = await GetPaymentById(paymentId);
+
+        Console.WriteLine("Transaction Amount: " + TransactionAmount.ToString());
+
+    }
+
+    private async Task<decimal?> GetPaymentById(string paymentId)
+    {
         var client = new PaymentClient();
         try
         {
             Payment payment = await client.GetAsync(1319381982);
             //Payment payment = await client.GetAsync((long)Convert.ToDouble(paymentId));
-            Console.WriteLine("Payment obtained correctly");
-            Console.WriteLine("TRANSACTION AMOUNT: " + payment.TransactionAmount);
+            return payment.TransactionAmount;
         }
         catch (Exception ex)
         {
             Console.WriteLine("Unexpected error: " + ex.Message);
             Console.WriteLine("Error details: " + ex.StackTrace);
+            return null;
         }
     }
 }
