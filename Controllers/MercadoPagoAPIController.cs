@@ -38,7 +38,8 @@ public class MercadoPagoAPIController : ControllerBase
             Installments = 1,
             Payer = paymentPayerRequest,
             TransactionAmount = (decimal?)2323.98,
-            Token = "00ec8b59ea2bf33fa13c073be165592f" // You need to generate token card
+            NotificationUrl = "https://9356-170-79-180-30.ngrok-free.app/mp/webhook", // Endpoint to receive webhook
+            Token = "b50f6333cbd2e364c15cea7ee9b8f3f7" // You need to generate token card
         };
 
         var client = new PaymentClient();
