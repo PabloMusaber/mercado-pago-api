@@ -1,3 +1,5 @@
+using MercadoPago.Client;
+using MercadoPago.Client.Common;
 using MercadoPago.Client.Payment;
 using MercadoPago.Resource.Payment;
 using MercadoPagoAPI.Entities;
@@ -17,6 +19,31 @@ public class MercadoPagoAPIController : ControllerBase
 
         _ = ProcessPaymentNotification();
 
+        return Ok();
+    }
+
+    [HttpPost("create-payment-api")]
+    public async Task<IActionResult> CreatePayment()
+    {
+        var requestOptions = new RequestOptions();
+        requestOptions.CustomHeaders.Add("x-idempotency-key", Guid.NewGuid().ToString());
+
+        var paymentPayerRequest = new PaymentPayerRequest
+        {
+            Email = "test_user_123@testuser.com"
+        };
+
+        var request = new PaymentCreateRequest
+        {
+            Installments = 1,
+            Payer = paymentPayerRequest,
+            TransactionAmount = (decimal?)2323.98,
+            Token = "00ec8b59ea2bf33fa13c073be165592f" // You need to generate token card
+        };
+
+        var client = new PaymentClient();
+        Payment payment = await client.CreateAsync(request, requestOptions);
+        Console.WriteLine("PAYMENT ID: " + payment.Id);
         return Ok();
     }
 
