@@ -90,13 +90,7 @@ public class MercadoPagoAPIController : ControllerBase
 
         string responseContent = await response.Content.ReadAsStringAsync();
 
-        Console.WriteLine("RESPUESTA: ");
-        Console.WriteLine(responseContent);
-
         var payment = JsonConvert.DeserializeObject<Payment>(responseContent);
-
-        Console.WriteLine("PAYMENT ID: ");
-        Console.WriteLine(payment?.Id);
 
         return Ok();
     }
@@ -177,15 +171,14 @@ public class MercadoPagoAPIController : ControllerBase
         var client = new PaymentClient();
         try
         {
-            Payment payment = await client.GetAsync(1319381982);
-            //Payment payment = await client.GetAsync((long)Convert.ToDouble(paymentId));
+            Payment payment = await client.GetAsync((long)Convert.ToDouble(paymentId));
             return payment.TransactionAmount;
         }
         catch (Exception ex)
         {
             Console.WriteLine("Unexpected error: " + ex.Message);
-            Console.WriteLine("Error details: " + ex.StackTrace);
             return null;
         }
     }
+
 }
