@@ -57,6 +57,50 @@ public class MercadoPagoAPIController : ControllerBase
         return Ok();
     }
 
+    [HttpPost("create-payment-http")]
+    public async Task<IActionResult> CreatePaymentRequest()
+    {
+        string url = "https://api.mercadopago.com/v1/payments";
+        string bearerToken = _configuration.GetSection("MercadoPago:AccessToken").Get<string>(); // Read token from configuration
+
+        var requestBody = new
+        {
+            transaction_amount = 2323.99,
+            token = "3f25910e10d8bd619cdf5ff84a294b36",
+            description = "Test Payment",
+            notification_url = "https://708b-170-79-180-30.ngrok-free.app/mp/webhook",
+            installments = 1,
+            payer = new
+            {
+                email = "test_user_123@testuser.com"
+            }
+        };
+
+        string jsonBody = JsonConvert.SerializeObject(requestBody);
+
+        var request = new HttpRequestMessage(HttpMethod.Post, url)
+        {
+            Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
+        };
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+        _httpClient.DefaultRequestHeaders.Add("X-Idempotency-Key", Guid.NewGuid().ToString());
+
+        HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+
+        Console.WriteLine("RESPUESTA: ");
+        Console.WriteLine(responseContent);
+
+        var payment = JsonConvert.DeserializeObject<Payment>(responseContent);
+
+        Console.WriteLine("PAYMENT ID: ");
+        Console.WriteLine(payment?.Id);
+
+        return Ok();
+    }
+
     [HttpPost("create-card-token")]
     public async Task<string?> CreateCardToken()
     {
