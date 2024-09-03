@@ -32,7 +32,7 @@ public class MercadoPagoAPIController : ControllerBase
     }
 
     [HttpPost("create-payment-api")]
-    public async Task<IActionResult> CreatePayment()
+    public async Task<IActionResult> CreatePayment(decimal transactionAmount)
     {
         var requestOptions = new RequestOptions();
         requestOptions.CustomHeaders.Add("x-idempotency-key", Guid.NewGuid().ToString());
@@ -46,7 +46,7 @@ public class MercadoPagoAPIController : ControllerBase
         {
             Installments = 1,
             Payer = paymentPayerRequest,
-            TransactionAmount = (decimal?)999.98,
+            TransactionAmount = transactionAmount,
             NotificationUrl = "https://f2ca-170-79-180-30.ngrok-free.app/mp/webhook", // Endpoint to receive webhook
             Token = await CreateCardToken() // You need to generate token card
         };
@@ -58,14 +58,14 @@ public class MercadoPagoAPIController : ControllerBase
     }
 
     [HttpPost("create-payment-http")]
-    public async Task<IActionResult> CreatePaymentRequest()
+    public async Task<IActionResult> CreatePaymentRequest(decimal transactionAmount)
     {
         string url = "https://api.mercadopago.com/v1/payments";
         string bearerToken = _configuration.GetSection("MercadoPago:AccessToken").Get<string>(); // Read token from configuration
 
         var requestBody = new
         {
-            transaction_amount = 2323.99,
+            transaction_amount = transactionAmount,
             token = await CreateCardToken(),
             description = "Test Payment",
             notification_url = "https://f2ca-170-79-180-30.ngrok-free.app/mp/webhook",
