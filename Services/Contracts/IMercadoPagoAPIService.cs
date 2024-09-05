@@ -7,7 +7,8 @@ public interface IMercadoPagoAPIService
     #region Methods
 
     Task<string> CreateCardToken();
-    Task CreatePayment(decimal transactionAmount);
+    Task<Payment> CreatePaymentByHTTPRequest(decimal transactionAmount);
+    Task<Payment> CreatePaymentBySDK(decimal transactionAmount);
     Task<Payment> GetPaymentById(string paymentId);
 
     #endregion
