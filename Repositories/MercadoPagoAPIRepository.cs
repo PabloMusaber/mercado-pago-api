@@ -84,7 +84,6 @@ public class MercadoPagoAPIRepository : IMercadoPagoAPIRepository
 
         var client = new PaymentClient();
         Payment payment = await client.CreateAsync(request, requestOptions);
-        Console.WriteLine("PAYMENT ID: " + payment.Id);
 
         return payment;
     }
@@ -148,7 +147,6 @@ public class MercadoPagoAPIRepository : IMercadoPagoAPIRepository
         }
 
         var tokenCardId = tokenCard.Id;
-        Console.WriteLine($"Token Id: {tokenCardId}");
 
         return tokenCardId;
     }
