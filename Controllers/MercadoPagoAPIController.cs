@@ -19,19 +19,31 @@ public class MercadoPagoAPIController : ControllerBase
     public async Task<IActionResult> WebhookAsync()
     {
         Console.WriteLine("Notification received");
-
         var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
 
-        var webhook = JsonConvert.DeserializeObject<Webhook>(json);
-
-        if (webhook == null)
+        _ = Task.Run(async () =>
         {
-            Console.WriteLine("Deserialization failed, webhook is null.");
-        }
+            try
+            {
+                var webhook = JsonConvert.DeserializeObject<Webhook>(json);
 
-        var paymentId = webhook.Data.Id;
+                if (webhook == null)
+                {
+                    Console.WriteLine("Deserialization failed, webhook is null.");
+                    return;
+                }
 
-        _ = _service.GetPaymentById(paymentId);
+                var paymentId = webhook.Data.Id;
+
+                var payment = await _service.GetPaymentById(paymentId);
+
+                Console.WriteLine("Transaction Amount: " + payment.TransactionAmount.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error processing webhook: " + ex.Message);
+            }
+        });
 
         return Ok();
     }
