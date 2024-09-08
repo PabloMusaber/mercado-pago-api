@@ -6,10 +6,10 @@ public interface IMercadoPagoAPIRepository
 {
     #region Methods
 
-    Task<string> CreateCardToken();
-    Task<Payment> CreatePaymentByHTTPRequest(decimal transactionAmount);
-    Task<Payment> CreatePaymentBySDK(decimal transactionAmount);
-    Task<Payment> GetPaymentById(string paymentId);
+    Task<string> CreateCardTokenAsync();
+    Task<Payment> CreatePaymentByHTTPRequestAsync(decimal transactionAmount);
+    Task<Payment> CreatePaymentBySDKAsync(decimal transactionAmount);
+    Task<Payment> GetPaymentByIdAsync(string paymentId);
 
     #endregion
 }

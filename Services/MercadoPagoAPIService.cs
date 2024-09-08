@@ -18,24 +18,24 @@ public class MercadoPagoAPIService : IMercadoPagoAPIService
     #endregion
 
     #region Methods
-    public async Task<string> CreateCardToken()
+    public async Task<string> CreateCardTokenAsync()
     {
-        return await _repository.CreateCardToken();
+        return await _repository.CreateCardTokenAsync();
     }
 
-    public async Task<Payment> CreatePaymentBySDK(decimal transactionAmount)
+    public async Task<Payment> CreatePaymentBySDKAsync(decimal transactionAmount)
     {
-        return await _repository.CreatePaymentBySDK(transactionAmount);
+        return await _repository.CreatePaymentBySDKAsync(transactionAmount);
     }
 
-    public async Task<Payment> CreatePaymentByHTTPRequest(decimal transactionAmount)
+    public async Task<Payment> CreatePaymentByHTTPRequestAsync(decimal transactionAmount)
     {
-        return await _repository.CreatePaymentByHTTPRequest(transactionAmount);
+        return await _repository.CreatePaymentByHTTPRequestAsync(transactionAmount);
     }
 
-    public async Task<Payment> GetPaymentById(string paymentId)
+    public async Task<Payment> GetPaymentByIdAsync(string paymentId)
     {
-        return await _repository.GetPaymentById(paymentId);
+        return await _repository.GetPaymentByIdAsync(paymentId);
     }
 
     #endregion

@@ -35,7 +35,7 @@ public class MercadoPagoAPIController : ControllerBase
 
                 var paymentId = webhook.Data.Id;
 
-                var payment = await _service.GetPaymentById(paymentId);
+                var payment = await _service.GetPaymentByIdAsync(paymentId);
 
                 Console.WriteLine("Transaction Amount: " + payment.TransactionAmount.ToString());
             }
@@ -51,21 +51,21 @@ public class MercadoPagoAPIController : ControllerBase
     [HttpPost("create-payment-sdk")]
     public async Task<IActionResult> CreatePaymentBySDK(decimal transactionAmount)
     {
-        var payment = await _service.CreatePaymentBySDK(transactionAmount);
+        var payment = await _service.CreatePaymentBySDKAsync(transactionAmount);
         return Ok(payment);
     }
 
     [HttpPost("create-payment-http")]
     public async Task<IActionResult> CreatePaymentByHTTPRequest(decimal transactionAmount)
     {
-        var payment = await _service.CreatePaymentByHTTPRequest(transactionAmount);
+        var payment = await _service.CreatePaymentByHTTPRequestAsync(transactionAmount);
         return Ok(payment);
     }
 
     [HttpPost("create-card-token")]
     public async Task<string?> CreateCardToken()
     {
-        return await _service.CreateCardToken();
+        return await _service.CreateCardTokenAsync();
     }
 
 }

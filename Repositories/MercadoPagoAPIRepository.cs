@@ -26,7 +26,7 @@ public class MercadoPagoAPIRepository : IMercadoPagoAPIRepository
 
     #region Methods
 
-    public async Task<Payment> CreatePaymentByHTTPRequest(decimal transactionAmount)
+    public async Task<Payment> CreatePaymentByHTTPRequestAsync(decimal transactionAmount)
     {
         string url = "https://api.mercadopago.com/v1/payments";
         string bearerToken = _configuration.GetSection("MercadoPago:AccessToken").Get<string>(); // Read token from configuration
@@ -34,9 +34,9 @@ public class MercadoPagoAPIRepository : IMercadoPagoAPIRepository
         var requestBody = new
         {
             transaction_amount = transactionAmount,
-            token = await CreateCardToken(),
+            token = await CreateCardTokenAsync(),
             description = "Test Payment",
-            notification_url = "https://9891-170-79-180-30.ngrok-free.app/mp/webhook",
+            notification_url = "https://c0e6-170-79-180-30.ngrok-free.app/mp/webhook",
             installments = 1,
             payer = new
             {
@@ -63,7 +63,7 @@ public class MercadoPagoAPIRepository : IMercadoPagoAPIRepository
         return payment;
     }
 
-    public async Task<Payment> CreatePaymentBySDK(decimal transactionAmount)
+    public async Task<Payment> CreatePaymentBySDKAsync(decimal transactionAmount)
     {
         var requestOptions = new RequestOptions();
         requestOptions.CustomHeaders.Add("x-idempotency-key", Guid.NewGuid().ToString());
@@ -78,8 +78,8 @@ public class MercadoPagoAPIRepository : IMercadoPagoAPIRepository
             Installments = 1,
             Payer = paymentPayerRequest,
             TransactionAmount = transactionAmount,
-            NotificationUrl = "https://9891-170-79-180-30.ngrok-free.app/mp/webhook", // Endpoint to receive webhook
-            Token = await CreateCardToken() // You need to generate token card
+            NotificationUrl = "https://c0e6-170-79-180-30.ngrok-free.app/mp/webhook", // Endpoint to receive webhook
+            Token = await CreateCardTokenAsync()
         };
 
         var client = new PaymentClient();
@@ -88,7 +88,7 @@ public class MercadoPagoAPIRepository : IMercadoPagoAPIRepository
         return payment;
     }
 
-    public async Task<Payment> GetPaymentById(string paymentId)
+    public async Task<Payment> GetPaymentByIdAsync(string paymentId)
     {
         var client = new PaymentClient();
         try
@@ -103,7 +103,7 @@ public class MercadoPagoAPIRepository : IMercadoPagoAPIRepository
         }
     }
 
-    public async Task<string> CreateCardToken()
+    public async Task<string> CreateCardTokenAsync()
     {
         string url = "https://api.mercadopago.com/v1/card_tokens";
         string bearerToken = _configuration.GetSection("MercadoPago:AccessToken").Get<string>(); // Read token from configuration
